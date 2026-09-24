@@ -12,17 +12,17 @@ class GupshupMonitorRepository
     }
 
     public function create(
-        string $conta,
-        string $idConta,
-        ?string $idChat,
-        string $numeroOrigem,
-        string $numeroDestino,
-        ?string $idFlow,
-        ?string $template,
-        ?string $idTemplate,
-        ?string $idMailing,
-        string $erro,
-        ?string $motivo
+        ?string $conta = null,
+        ?string $idConta = null,
+        ?string $idChat = null,
+        ?string $numeroOrigem = null,
+        ?string $numeroDestino = null,
+        ?string $idFlow = null,
+        ?string $template = null,
+        ?string $idTemplate = null,
+        ?string $idMailing = null,
+        ?string $erro = null,
+        ?string $motivo = null
     ): int {
         $sql = '
             INSERT INTO whatsapp_message_errors (

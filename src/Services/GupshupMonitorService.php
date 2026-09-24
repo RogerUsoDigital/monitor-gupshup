@@ -33,92 +33,50 @@ class GupshupMonitorService
 
     private function validateEvent(array $event): array
     {
-        $conta = $event['conta'] ?? null;
-        $idConta = $event['id_conta'] ?? null;
-        $idChat = $event['id_chat'] ?? null;
-        $numeroOrigem = $event['numero_origem'] ?? null;
-        $numeroDestino = $event['numero_destino'] ?? null;
-        $idFlow = $event['id_flow'] ?? null;
-        $template = $event['template'] ?? null;
-        $idTemplate = $event['id_template'] ?? null;
-        $idMailing = $event['id_mailing'] ?? null;
-        $erro = $event['erro'] ?? null;
-        $motivo = $event['motivo'] ?? null;
-
-        if (!is_string($conta) || trim($conta) === '') {
-            throw new InvalidArgumentException(
-                'Field "conta" is required'
-            );
-        }
-
-        if (!is_string($idConta) || trim($idConta) === '') {
-            throw new InvalidArgumentException(
-                'Field "id_conta" is required'
-            );
-        }
-
-        if (!is_string($numeroOrigem) || trim($numeroOrigem) === '') {
-            throw new InvalidArgumentException(
-                'Field "numero_origem" is required'
-            );
-        }
-
-        if (!is_string($numeroDestino) || trim($numeroDestino) === '') {
-            throw new InvalidArgumentException(
-                'Field "numero_destino" is required'
-            );
-        }
-
-        if (!is_string($erro) || trim($erro) === '') {
-            throw new InvalidArgumentException(
-                'Field "erro" is required'
-            );
-        }
-
-        $optionalFields = [
-            'id_chat' => $idChat,
-            'id_flow' => $idFlow,
-            'template' => $template,
-            'id_template' => $idTemplate,
-            'id_mailing' => $idMailing,
-            'motivo' => $motivo
-        ];
-
-        foreach ($optionalFields as $field => $value) {
-            if ($value !== null && (!is_string($value) || trim($value) === '')) {
-                throw new InvalidArgumentException(
-                    sprintf('Field "%s" must be a non-empty string', $field)
-                );
-            }
-        }
-
         return [
-            'conta' => trim($conta),
-            'id_conta' => trim($idConta),
-            'id_chat' => $idChat !== null ? trim($idChat) : null,
-            'numero_origem' => trim($numeroOrigem),
-            'numero_destino' => trim($numeroDestino),
-            'id_flow' => $idFlow !== null ? trim($idFlow) : null,
-            'template' => $template !== null ? trim($template) : null,
-            'id_template' => $idTemplate !== null ? trim($idTemplate) : null,
-            'id_mailing' => $idMailing !== null ? trim($idMailing) : null,
-            'erro' => trim($erro),
-            'motivo' => $motivo !== null ? trim($motivo) : null
+            'conta' => $this->parseField($event['conta'] ?? null),
+            'id_conta' => $this->parseField($event['id_conta'] ?? null),
+            'id_chat' => $this->parseField($event['id_chat'] ?? null),
+            'numero_origem' => $this->parseField($event['numero_origem'] ?? null),
+            'numero_destino' => $this->parseField($event['numero_destino'] ?? null),
+            'id_flow' => $this->parseField($event['id_flow'] ?? null),
+            'template' => $this->parseField($event['template'] ?? null),
+            'id_template' => $this->parseField($event['id_template'] ?? null),
+            'id_mailing' => $this->parseField($event['id_mailing'] ?? null),
+            'erro' => $this->parseField($event['erro'] ?? null),
+            'motivo' => $this->parseField($event['motivo'] ?? null)
         ];
     }
 
+    private function parseField(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        if (is_scalar($value)) {
+            return trim((string) $value);
+        }
+
+        return null;
+    }
+
     private function processEvent(
-        string $conta,
-        string $idConta,
-        ?string $idChat,
-        string $numeroOrigem,
-        string $numeroDestino,
-        ?string $idFlow,
-        ?string $template,
-        ?string $idTemplate,
-        ?string $idMailing,
-        string $erro,
-        ?string $motivo
+        ?string $conta = null,
+        ?string $idConta = null,
+        ?string $idChat = null,
+        ?string $numeroOrigem = null,
+        ?string $numeroDestino = null,
+        ?string $idFlow = null,
+        ?string $template = null,
+        ?string $idTemplate = null,
+        ?string $idMailing = null,
+        ?string $erro = null,
+        ?string $motivo = null
     ): array {
         $id = $this->repository->create(
             $conta,
