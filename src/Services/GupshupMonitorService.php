@@ -26,7 +26,8 @@ class GupshupMonitorService
             $event['template'],
             $event['id_template'],
             $event['id_mailing'],
-            $event['erro']
+            $event['erro'],
+            $event['motivo']
         );
     }
 
