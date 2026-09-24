@@ -47,7 +47,13 @@ class GupshupMonitorController
             $response = [
                 'success' => false,
                 'message' => 'Internal server error'
-            ]);
+            ];
+
+            if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
+                $response['error'] = $e->getMessage();
+            }
+
+            $this->response(500, $response);
         }
     }
 

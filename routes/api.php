@@ -73,10 +73,16 @@ if ($method === 'POST' && $uri === '/v1/gupshup/event') {
 
         http_response_code(500);
 
-        echo json_encode([
+        $response = [
             'success' => false,
             'message' => 'Internal server error'
-        ]);
+        ];
+
+        if (($_ENV['APP_ENV'] ?? 'production') !== 'production') {
+            $response['error'] = $e->getMessage();
+        }
+
+        echo json_encode($response);
     }
 
     exit;
