@@ -42,6 +42,7 @@ class GupshupMonitorService
         $idTemplate = $event['id_template'] ?? null;
         $idMailing = $event['id_mailing'] ?? null;
         $erro = $event['erro'] ?? null;
+        $motivo = $event['motivo'] ?? null;
 
         if (!is_string($conta) || trim($conta) === '') {
             throw new InvalidArgumentException(
@@ -78,7 +79,8 @@ class GupshupMonitorService
             'id_flow' => $idFlow,
             'template' => $template,
             'id_template' => $idTemplate,
-            'id_mailing' => $idMailing
+            'id_mailing' => $idMailing,
+            'motivo' => $motivo
         ];
 
         foreach ($optionalFields as $field => $value) {
@@ -99,7 +101,8 @@ class GupshupMonitorService
             'template' => $template !== null ? trim($template) : null,
             'id_template' => $idTemplate !== null ? trim($idTemplate) : null,
             'id_mailing' => $idMailing !== null ? trim($idMailing) : null,
-            'erro' => trim($erro)
+            'erro' => trim($erro),
+            'motivo' => $motivo !== null ? trim($motivo) : null
         ];
     }
 
@@ -113,7 +116,8 @@ class GupshupMonitorService
         ?string $template,
         ?string $idTemplate,
         ?string $idMailing,
-        string $erro
+        string $erro,
+        ?string $motivo
     ): array {
         $id = $this->repository->create(
             $conta,
@@ -125,7 +129,8 @@ class GupshupMonitorService
             $template,
             $idTemplate,
             $idMailing,
-            $erro
+            $erro,
+            $motivo
         );
 
         return [

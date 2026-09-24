@@ -21,7 +21,8 @@ class GupshupMonitorRepository
         ?string $template,
         ?string $idTemplate,
         ?string $idMailing,
-        string $erro
+        string $erro,
+        ?string $motivo
     ): int {
         $sql = '
             INSERT INTO whatsapp_message_errors (
@@ -34,7 +35,8 @@ class GupshupMonitorRepository
                 template,
                 id_template,
                 id_mailing,
-                erro
+                erro,
+                motivo
             ) VALUES (
                 :conta,
                 :id_conta,
@@ -45,7 +47,8 @@ class GupshupMonitorRepository
                 :template,
                 :id_template,
                 :id_mailing,
-                :erro
+                :erro,
+                :motivo
             )
         ';
 
@@ -61,7 +64,8 @@ class GupshupMonitorRepository
             'template' => $template,
             'id_template' => $idTemplate,
             'id_mailing' => $idMailing,
-            'erro' => $erro
+            'erro' => $erro,
+            'motivo' => $motivo
         ]);
 
         return (int) $this->connection->lastInsertId();
