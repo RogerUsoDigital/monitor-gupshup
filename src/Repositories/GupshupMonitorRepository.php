@@ -20,11 +20,11 @@ class GupshupMonitorRepository
         ?string $idFlow,
         ?string $template,
         ?string $idTemplate,
-        string $idMailing,
+        ?string $idMailing,
         string $erro
     ): int {
         $sql = '
-            INSERT INTO gupshup_monitor_events (
+            INSERT INTO whatsapp_message_errors (
                 conta,
                 id_conta,
                 id_chat,

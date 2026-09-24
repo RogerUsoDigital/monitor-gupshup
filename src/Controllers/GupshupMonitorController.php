@@ -42,7 +42,9 @@ class GupshupMonitorController
                 'message' => $e->getMessage()
             ]);
         } catch (Throwable $e) {
-            $this->response(500, [
+            error_log($e->getMessage());
+
+            $response = [
                 'success' => false,
                 'message' => 'Internal server error'
             ]);
