@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Repositories;
+
+use PDO;
+
+class GupshupMonitorRepository
+{
+    public function __construct(
+        private PDO $connection
+    ) {
+    }
+
+    public function create(
+        string $conta,
+        string $idConta,
+        ?string $idChat,
+        string $numeroOrigem,
+        string $numeroDestino,
+        ?string $idFlow,
+        ?string $template,
+        ?string $idTemplate,
+        string $idMailing,
+        string $erro
+    ): int {
+        $sql = '
+            INSERT INTO gupshup_monitor_events (
+                conta,
+                id_conta,
+                id_chat,
+                numero_origem,
+                numero_destino,
+                id_flow,
+                template,
+                id_template,
+                id_mailing,
+                erro
+            ) VALUES (
+                :conta,
+                :id_conta,
+                :id_chat,
+                :numero_origem,
+                :numero_destino,
+                :id_flow,
+                :template,
+                :id_template,
+                :id_mailing,
+                :erro
+            )
+        ';
+
+        $statement = $this->connection->prepare($sql);
+
+        $statement->execute([
+            'conta' => $conta,
+            'id_conta' => $idConta,
+            'id_chat' => $idChat,
+            'numero_origem' => $numeroOrigem,
+            'numero_destino' => $numeroDestino,
+            'id_flow' => $idFlow,
+            'template' => $template,
+            'id_template' => $idTemplate,
+            'id_mailing' => $idMailing,
+            'erro' => $erro
+        ]);
+
+        return (int) $this->connection->lastInsertId();
+    }
+}
